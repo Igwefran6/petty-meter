@@ -176,7 +176,7 @@ const App: React.FC = () => {
         {/* Header */}
         <header className="text-center mb-10">
           <h1
-            className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary mb-2 tracking-tight cursor-pointer"
+            className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-2 tracking-tight cursor-pointer"
             onClick={() => {
               handleReset();
               setActiveTab("meter");

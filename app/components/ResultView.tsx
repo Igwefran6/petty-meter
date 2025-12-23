@@ -92,7 +92,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
     >
       <div
         ref={cardRef}
-        className="bg-white rounded-4xl shadow-2xl p-6 md:p-8 border-b-8 relative overflow-hidden flex flex-col"
+        className="bg-white rounded-[2rem] shadow-2xl p-6 md:p-8 border-b-8 relative overflow-hidden flex flex-col"
         style={{ borderColor: result.score > 50 ? "#FF006E" : "#8AC926" }}
       >
         <div className="absolute -top-6 -right-6 w-24 h-24 bg-orange-50 rounded-full flex items-center justify-center pt-6 pr-6">

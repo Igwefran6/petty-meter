@@ -133,8 +133,8 @@ export const FormView: React.FC<FormViewProps> = ({
         className={`w-full py-4 rounded-xl font-bold text-lg text-white shadow-xl transition-transform transform active:scale-95 flex items-center justify-center gap-2
           ${
             isSelf
-              ? "bg-linear-to-r from-primary to-orange-500 hover:shadow-orange-200"
-              : "bg-linear-to-r from-secondary to-pink-600 hover:shadow-pink-200"
+              ? "bg-gradient-to-r from-primary to-orange-500 hover:shadow-orange-200"
+              : "bg-gradient-to-r from-secondary to-pink-600 hover:shadow-pink-200"
           }`}
       >
         <span>{isSelf ? "Judge My Pettiness" : "Expose Their Pettiness"}</span>

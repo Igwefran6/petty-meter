@@ -3,6 +3,7 @@
 @theme {
   --font-sans: var(--font-space-grotesk), sans-serif;
 
+  /* Custom Colors */
   --color-primary: #ff6b35;
   --color-secondary: #ff006e;
   --color-accent: #ffbe0b;
@@ -12,12 +13,22 @@
   --color-muted: #8d99ae;
   --color-bg-light: #fff5eb;
   --color-bg-dark: #ffe8cc;
+
+  /* Additional color shades needed for gradients */
+  --color-orange-50: #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #fed7aa;
+  --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+
+  --color-pink-200: #fbcfe8;
+  --color-pink-600: #db2777;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-bg-light);
-  color: var(--color-dark);
+  background-color: #fff5eb;
+  color: #2b2d42;
 }
 
 /* Custom Scrollbar */
@@ -25,9 +36,9 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-light);
+  background: #fff5eb;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
+  background: #ff6b35;
   border-radius: 4px;
 }
