@@ -52,7 +52,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         </button>
       </div>
 
-      <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+      <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 py-2 custom-scrollbar">
         <AnimatePresence initial={false}>
           {history.map((item, index) => {
             const zone =
