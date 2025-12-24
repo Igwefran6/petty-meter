@@ -1,20 +1,21 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { AnalysisResult, Mode } from "@/types";
 import { SYSTEM_INSTRUCTION } from "@/constants";
+import "server-only";
 
 export const analyzeGrievance = async (
   grievance: string,
   mode: Mode,
   name?: string
 ): Promise<AnalysisResult> => {
-  if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     throw new Error(
-      "API Key is missing. Please set the NEXT_PUBLIC_GEMINI_API_KEY environment variable."
+      "API Key is missing. Please set the GEMINI_API_KEY environment variable."
     );
   }
 
   const ai = new GoogleGenAI({
-    apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY,
+    apiKey: process.env.GEMINI_API_KEY,
   });
 
   const prompt = `
