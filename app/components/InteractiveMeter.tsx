@@ -1,6 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Mode, AnalysisResult, FormData, HistoryItem } from "@/types";
 import { analyzeGrievanceAction } from "../actions";
@@ -14,9 +19,14 @@ interface InteractiveMeterProps {
   onHistoryAdd: (item: HistoryItem) => void;
 }
 
-export const InteractiveMeter: React.FC<InteractiveMeterProps> = ({
-  onHistoryAdd,
-}) => {
+export interface InteractiveMeterHandle {
+  showHistoryItem: (mode: Mode, name: string, result: AnalysisResult) => void;
+}
+
+export const InteractiveMeter = forwardRef<
+  InteractiveMeterHandle,
+  InteractiveMeterProps
+>(({ onHistoryAdd }, ref) => {
   const [mode, setMode] = useState<Mode>(Mode.SELF);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,6 +45,19 @@ export const InteractiveMeter: React.FC<InteractiveMeterProps> = ({
       return () => clearInterval(interval);
     }
   }, [isLoading]);
+
+  // Expose showHistoryItem method via ref
+  useImperativeHandle(ref, () => ({
+    showHistoryItem: (
+      selectedMode: Mode,
+      selectedName: string,
+      selectedResult: AnalysisResult
+    ) => {
+      setMode(selectedMode);
+      setSubjectName(selectedName);
+      setResult(selectedResult);
+    },
+  }));
 
   const handleModeChange = (newMode: Mode) => {
     if (isLoading) return;
@@ -154,4 +177,6 @@ export const InteractiveMeter: React.FC<InteractiveMeterProps> = ({
       </div>
     </>
   );
-};
+});
+
+InteractiveMeter.displayName = "InteractiveMeter";
