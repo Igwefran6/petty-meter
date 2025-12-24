@@ -3,7 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Mode, AnalysisResult, FormData, HistoryItem } from "@/types";
-import { analyzeGrievance } from "@/services/geminiService";
+import {
+  analyzeGrievanceAction,
+  getHistoryAction,
+  saveHistoryAction,
+} from "./actions";
 import { FormView } from "./components/FormView";
 import { ResultView } from "./components/ResultView";
 import { HistoryView } from "./components/HistoryView";
@@ -19,21 +23,20 @@ const App: React.FC = () => {
   const [currentFact, setCurrentFact] = useState(FUN_FACTS[0]);
   const [loadingMsg, setLoadingMsg] = useState(LOADING_MESSAGES[0]);
   const [subjectName, setSubjectName] = useState<string>("");
-  const [history, setHistory] = useState<HistoryItem[]>(() => {
-    try {
-      const saved = localStorage.getItem("pettiness_history");
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      console.error("Failed to parse history", e);
-      return [];
-    }
-  });
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+
+  // Load history from server on mount
+  useEffect(() => {
+    getHistoryAction().then(setHistory).catch(console.error);
+  }, []);
 
   const { playClick, playPop, playSuccess } = useSound();
 
   // Save history on change
   useEffect(() => {
-    localStorage.setItem("pettiness_history", JSON.stringify(history));
+    if (history.length > 0) {
+      saveHistoryAction(history).catch(console.error);
+    }
   }, [history]);
 
   // Rotation logic for facts and messages
@@ -68,7 +71,11 @@ const App: React.FC = () => {
     setIsLoading(true);
     setSubjectName(data.name);
     try {
-      const response = await analyzeGrievance(data.grievance, mode, data.name);
+      const response = await analyzeGrievanceAction(
+        data.grievance,
+        mode,
+        data.name
+      );
       setResult(response);
       playSuccess();
 
@@ -124,7 +131,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bgLight text-dark selection:bg-primary selection:text-white flex flex-col">
+    <div className="min-h-screen bg-bgLight text-dark selection:bg-primary selection:text-white flex flex-col pt-16">
       {/* Background decoration */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-50">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-yellow-200 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>

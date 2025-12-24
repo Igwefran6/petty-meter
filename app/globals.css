@@ -30,15 +30,3 @@ body {
   background-color: #fff5eb;
   color: #2b2d42;
 }
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #fff5eb;
-}
-::-webkit-scrollbar-thumb {
-  background: #ff6b35;
-  border-radius: 4px;
-}
