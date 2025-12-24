@@ -29,7 +29,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="flex flex-col items-center justify-center py-20 text-center"
+        className="flex flex-col items-center justify-center py-20 text-center bg-bg-light p-6 rounded-2xl"
       >
         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-4">
           <History size={32} />
@@ -44,7 +44,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-bg-light p-6 rounded-2xl">
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-2xl font-black text-dark flex items-center gap-2">
           <History className="text-primary" />
