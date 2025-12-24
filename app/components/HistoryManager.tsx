@@ -12,6 +12,8 @@ import { getHistoryAction, saveHistoryAction } from "../actions";
 import { HistoryView } from "./HistoryView";
 import { History as HistoryIcon, X } from "lucide-react";
 import { useSound } from "@/hooks/useSound";
+import { useToast } from "../context/ToastContext";
+import { ConfirmModal } from "./ui/ConfirmModal";
 
 interface HistoryManagerProps {
   onSelectHistory?: (mode: Mode, name: string, result: AnalysisResult) => void;
@@ -27,8 +29,10 @@ export const HistoryManager = forwardRef<
 >(({ onSelectHistory }, ref) => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const { playClick, playPop } = useSound();
+  const { showToast } = useToast();
 
   // Load history from server on mount
   useEffect(() => {
@@ -64,9 +68,12 @@ export const HistoryManager = forwardRef<
 
   const handleClearHistory = () => {
     playClick();
-    if (confirm("Burn all the receipts? This cannot be undone.")) {
-      setHistory([]);
-    }
+    setIsConfirmOpen(true);
+  };
+
+  const confirmClearHistory = () => {
+    setHistory([]);
+    showToast("History burned successfully! 🔥", "success");
   };
 
   const handleDeleteHistoryItem = (id: string) => {
@@ -142,6 +149,16 @@ export const HistoryManager = forwardRef<
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={confirmClearHistory}
+        title="Burn The Receipts?"
+        message="This will permanently delete all your petty history. There is no turning back."
+        confirmText="Burn It 🔥"
+        isDangerous={true}
+      />
     </>
   );
 });

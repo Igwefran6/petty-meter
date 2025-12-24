@@ -5,6 +5,8 @@ import { AnalysisResult, Mode } from "@/types";
 import { Gauge } from "./Gauge";
 import { useSound } from "@/hooks/useSound";
 
+import { useToast } from "../context/ToastContext";
+
 interface ResultViewProps {
   result: AnalysisResult;
   mode: Mode;
@@ -22,6 +24,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
   const cardRef = useRef<HTMLDivElement>(null);
   const [isSharing, setIsSharing] = useState(false);
   const { playClick } = useSound();
+  const { showToast } = useToast();
 
   const handleShare = async () => {
     if (!cardRef.current || isSharing) return;
@@ -90,7 +93,10 @@ export const ResultView: React.FC<ResultViewProps> = ({
       );
     } catch (err) {
       console.error("Capture failed", err);
-      alert("Failed to generate image. Try taking a normal screenshot!");
+      showToast(
+        "Failed to generate image. Try taking a normal screenshot!",
+        "error"
+      );
     } finally {
       setIsSharing(false);
     }
@@ -105,7 +111,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
     >
       <div
         ref={cardRef}
-        className="bg-white rounded-[2rem] shadow-2xl p-6 md:p-8 border-b-8 relative overflow-hidden flex flex-col"
+        className="bg-white rounded-4xl shadow-2xl p-6 md:p-8 border-b-8 relative overflow-hidden flex flex-col"
         style={{ borderColor: result.score > 50 ? "#FF006E" : "#8AC926" }}
       >
         <div className="absolute -top-6 -right-6 w-24 h-24 bg-orange-50 rounded-full flex items-center justify-center pt-6 pr-6">

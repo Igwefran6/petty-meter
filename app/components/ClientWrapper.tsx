@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import { HistoryItem, Mode, AnalysisResult } from "@/types";
 import { InteractiveMeter, InteractiveMeterHandle } from "./InteractiveMeter";
 import { HistoryManager, HistoryManagerHandle } from "./HistoryManager";
+import { ToastProvider } from "../context/ToastContext";
 
 export const ClientWrapper: React.FC = () => {
   const historyManagerRef = useRef<HistoryManagerHandle | null>(null);
@@ -22,7 +23,7 @@ export const ClientWrapper: React.FC = () => {
   };
 
   return (
-    <>
+    <ToastProvider>
       <HistoryManager
         ref={historyManagerRef}
         onSelectHistory={handleSelectHistory}
@@ -31,6 +32,6 @@ export const ClientWrapper: React.FC = () => {
         ref={interactiveMeterRef}
         onHistoryAdd={handleHistoryAdd}
       />
-    </>
+    </ToastProvider>
   );
 };

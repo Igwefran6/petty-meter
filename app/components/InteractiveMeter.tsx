@@ -14,6 +14,7 @@ import { ResultView } from "./ResultView";
 import { LOADING_MESSAGES } from "@/constants";
 import { User, Users } from "lucide-react";
 import { useSound } from "@/hooks/useSound";
+import { useToast } from "../context/ToastContext";
 
 interface InteractiveMeterProps {
   onHistoryAdd: (item: HistoryItem) => void;
@@ -34,6 +35,7 @@ export const InteractiveMeter = forwardRef<
   const [subjectName, setSubjectName] = useState<string>("");
 
   const { playClick, playSuccess } = useSound();
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (isLoading) {
@@ -94,8 +96,9 @@ export const InteractiveMeter = forwardRef<
       onHistoryAdd(newItem);
     } catch (e) {
       console.error(e);
-      alert(
-        "Something went wrong with the pettiness council. Check your API Key."
+      showToast(
+        "Something went wrong with the pettiness council. Check your API Key.",
+        "error"
       );
     } finally {
       setIsLoading(false);
