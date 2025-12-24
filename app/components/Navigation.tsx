@@ -176,7 +176,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 </p>
 
                 <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                  v0.1.0 • Made with ☕
+                  v0.1.1 • Made with ☕
                 </div>
               </div>
             </motion.div>
