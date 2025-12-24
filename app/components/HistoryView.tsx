@@ -1,13 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  History,
-  Trash2,
-  ChevronRight,
-  User,
-  Users,
-  Calendar,
-} from "lucide-react";
+import { History, Trash2, ChevronRight, Calendar } from "lucide-react";
 import { HistoryItem } from "@/types";
 import { ZONES } from "@/constants";
 
@@ -46,20 +39,20 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   return (
     <div className="space-y-6 bg-bg-light p-6 rounded-2xl">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-2xl font-black text-dark flex items-center gap-2">
+        <h2 className="text-base md:text-2xl font-black text-dark flex items-center gap-2">
           <History className="text-primary" />
           Drama Archive
         </h2>
         <button
           onClick={onClear}
-          className="text-xs font-bold text-red-500 uppercase tracking-widest hover:bg-red-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
+          className="text-[10px] md:text-xs font-bold text-red-500 uppercase tracking-widest hover:bg-red-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
         >
-          <Trash2 size={14} />
+          <Trash2 size={12} />
           Burn Receipts
         </button>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
         <AnimatePresence initial={false}>
           {history.map((item, index) => {
             const zone =
