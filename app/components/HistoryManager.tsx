@@ -21,6 +21,7 @@ interface HistoryManagerProps {
 
 export interface HistoryManagerHandle {
   addToHistory: (item: HistoryItem) => void;
+  toggle: () => void;
 }
 
 export const HistoryManager = forwardRef<
@@ -46,10 +47,13 @@ export const HistoryManager = forwardRef<
     }
   }, [history]);
 
-  // Expose addToHistory method via ref
+  // Expose methods via ref
   useImperativeHandle(ref, () => ({
     addToHistory: (item: HistoryItem) => {
       setHistory((prev) => [item, ...prev].slice(0, 50));
+    },
+    toggle: () => {
+      toggleHistory();
     },
   }));
 
@@ -83,45 +87,6 @@ export const HistoryManager = forwardRef<
 
   return (
     <>
-      {/* Floating History Button */}
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={toggleHistory}
-        className={`fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-colors cursor-pointer ${
-          isOpen ? "bg-primary text-white" : "bg-dark text-white"
-        }`}
-        title={isOpen ? "Close History" : "View History"}
-      >
-        <AnimatePresence mode="wait">
-          {!isOpen ? (
-            <motion.div
-              key="history-icon"
-              initial={{ opacity: 0, rotate: -45 }}
-              animate={{ opacity: 1, rotate: 0 }}
-              exit={{ opacity: 0, rotate: 45 }}
-            >
-              <HistoryIcon size={24} />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="close-icon"
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.5 }}
-            >
-              <X size={24} />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {history.length > 0 && !isOpen && (
-          <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-secondary text-[10px] font-black border-2 border-white shadow-sm">
-            {history.length}
-          </span>
-        )}
-      </motion.button>
-
       {/* History Modal/View */}
       <AnimatePresence>
         {isOpen && (

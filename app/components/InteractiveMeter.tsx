@@ -22,6 +22,7 @@ interface InteractiveMeterProps {
 
 export interface InteractiveMeterHandle {
   showHistoryItem: (mode: Mode, name: string, result: AnalysisResult) => void;
+  reset: () => void;
 }
 
 export const InteractiveMeter = forwardRef<
@@ -61,6 +62,9 @@ export const InteractiveMeter = forwardRef<
 
       // Smooth scroll to top
       window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    reset: () => {
+      handleReset();
     },
   }));
 
