@@ -4,8 +4,6 @@ import { RefreshCcw, Share2, Loader2, Award } from "lucide-react";
 import { AnalysisResult, Mode } from "@/types";
 import { Gauge } from "./Gauge";
 import { useSound } from "@/hooks/useSound";
-// @ts-ignore
-import html2canvas from "html2canvas";
 
 interface ResultViewProps {
   result: AnalysisResult;
@@ -31,13 +29,28 @@ export const ResultView: React.FC<ResultViewProps> = ({
     setIsSharing(true);
 
     try {
+      // Dynamic import of html2canvas-pro
+      const html2canvas = (await import("html2canvas-pro")).default;
+
+      // Wait a bit for any animations to settle
       await new Promise((resolve) => setTimeout(resolve, 300));
+
       const canvas = await html2canvas(cardRef.current, {
-        scale: 2,
-        backgroundColor: "#FFF5EB",
+        scale: 3, // Higher scale for peak quality
+        backgroundColor: "#FFF5EB", // Match the card/background color
         logging: false,
         useCORS: true,
         allowTaint: true,
+        // Exclude elements with the ignore attribute
+        ignoreElements: (element) => {
+          if (
+            element.getAttribute &&
+            element.getAttribute("data-html2canvas-ignore")
+          ) {
+            return true;
+          }
+          return false;
+        },
       });
 
       canvas.toBlob(
