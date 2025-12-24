@@ -81,7 +81,7 @@ export const HistoryManager = forwardRef<
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={toggleHistory}
-        className={`fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-colors ${
+        className={`fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-colors cursor-pointer ${
           isOpen ? "bg-primary text-white" : "bg-dark text-white"
         }`}
         title={isOpen ? "Close History" : "View History"}
@@ -122,7 +122,7 @@ export const HistoryManager = forwardRef<
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 cursor-pointer"
             onClick={toggleHistory}
           >
             <motion.div

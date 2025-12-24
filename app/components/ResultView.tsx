@@ -148,7 +148,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
               onReset();
             }}
             disabled={isSharing}
-            className="flex-1 flex items-center justify-center gap-2 py-4 px-4 rounded-2xl bg-gray-100 text-dark font-bold hover:bg-gray-200 transition-all active:scale-95 disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-2 py-4 px-4 rounded-2xl bg-gray-100 text-dark font-bold hover:bg-gray-200 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
           >
             <RefreshCcw size={18} />
             Try Again
@@ -157,7 +157,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
           <button
             onClick={handleShare}
             disabled={isSharing}
-            className="flex-1 flex items-center justify-center gap-2 py-4 px-4 rounded-2xl bg-primary text-white font-bold hover:bg-orange-600 transition-all active:scale-95 shadow-lg shadow-orange-200 disabled:opacity-80"
+            className="flex-1 flex items-center justify-center gap-2 py-4 px-4 rounded-2xl bg-primary text-white font-bold hover:bg-orange-600 transition-all active:scale-95 shadow-lg shadow-orange-200 disabled:opacity-80 cursor-pointer"
           >
             {isSharing ? (
               <Loader2 size={18} className="animate-spin" />

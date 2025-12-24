@@ -130,7 +130,7 @@ export const FormView: React.FC<FormViewProps> = ({
 
       <button
         type="submit"
-        className={`w-full py-4 rounded-xl font-bold text-lg text-white shadow-xl transition-transform transform active:scale-95 flex items-center justify-center gap-2
+        className={`w-full py-4 rounded-xl font-bold text-lg text-white shadow-xl transition-transform transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer
           ${
             isSelf
               ? "bg-gradient-to-r from-primary to-orange-500 hover:shadow-orange-200"

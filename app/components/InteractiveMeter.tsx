@@ -56,6 +56,9 @@ export const InteractiveMeter = forwardRef<
       setMode(selectedMode);
       setSubjectName(selectedName);
       setResult(selectedResult);
+
+      // Smooth scroll to top
+      window.scrollTo({ top: 0, behavior: "smooth" });
     },
   }));
 
@@ -119,7 +122,7 @@ export const InteractiveMeter = forwardRef<
             <div className="grid grid-cols-2 w-full relative z-10">
               <button
                 onClick={() => handleModeChange(Mode.SELF)}
-                className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-colors ${
+                className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-colors cursor-pointer ${
                   mode === Mode.SELF
                     ? "text-white"
                     : "text-gray-500 hover:text-gray-700"
@@ -130,7 +133,7 @@ export const InteractiveMeter = forwardRef<
               </button>
               <button
                 onClick={() => handleModeChange(Mode.OTHER)}
-                className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-colors ${
+                className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-colors cursor-pointer ${
                   mode === Mode.OTHER
                     ? "text-white"
                     : "text-gray-500 hover:text-gray-700"

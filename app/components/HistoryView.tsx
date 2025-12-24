@@ -52,7 +52,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         </h2>
         <button
           onClick={onClear}
-          className="text-xs font-bold text-red-500 uppercase tracking-widest hover:bg-red-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-1"
+          className="text-xs font-bold text-red-500 uppercase tracking-widest hover:bg-red-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
         >
           <Trash2 size={14} />
           Burn Receipts
@@ -126,7 +126,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                       e.stopPropagation();
                       onDeleteOne(item.id);
                     }}
-                    className="p-2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="p-2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                   >
                     <Trash2 size={16} />
                   </button>

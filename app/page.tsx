@@ -17,7 +17,7 @@ export default function Home() {
       <div className="relative z-10 container mx-auto px-4 py-6 max-w-2xl grow flex flex-col">
         {/* Header */}
         <header className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-2 tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-2 tracking-tight cursor-pointer">
             Petty Meter
           </h1>
           <div className="text-sm font-medium text-gray-500 bg-white/50 inline-block px-4 py-1 rounded-full backdrop-blur-sm border border-white">
