@@ -112,7 +112,7 @@ export const FormView: React.FC<FormViewProps> = ({
         </div>
       )}
 
-      <div className="space-y-2">
+      <div className="space-y-2 mt-4">
         <label className="text-sm font-bold text-gray-700 ml-1">
           {isSelf ? "What's bothering you?" : "What did they complain about?"}
         </label>

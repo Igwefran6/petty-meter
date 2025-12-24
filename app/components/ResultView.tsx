@@ -53,9 +53,9 @@ export const ResultView: React.FC<ResultViewProps> = ({
           ) {
             try {
               await navigator.share({
-                title: "The Pettiness Meter",
+                title: "Petty Meter",
                 text: isSelf
-                  ? `I just got rated ${result.score}% PETTY on The Pettiness Meter! 💀`
+                  ? `I just got rated ${result.score}% PETTY on Petty Meter! 💀`
                   : `I just exposed ${name || "them"} as ${
                       result.score
                     }% PETTY! 💀`,

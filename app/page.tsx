@@ -182,7 +182,7 @@ const App: React.FC = () => {
               setActiveTab("meter");
             }}
           >
-            The Pettiness Meter
+            Petty Meter
           </h1>
           <motion.div
             key={currentFact}
