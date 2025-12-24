@@ -7,7 +7,9 @@ import { HistoryManager, HistoryManagerHandle } from "./HistoryManager";
 import { ToastProvider } from "../context/ToastContext";
 import { Navigation } from "./Navigation";
 
-export const ClientWrapper: React.FC = () => {
+export const ClientWrapper: React.FC<{ randomFact: string }> = ({
+  randomFact,
+}) => {
   const historyManagerRef = useRef<HistoryManagerHandle | null>(null);
   const interactiveMeterRef = useRef<InteractiveMeterHandle | null>(null);
 
@@ -37,6 +39,17 @@ export const ClientWrapper: React.FC = () => {
 
   return (
     <ToastProvider>
+      <header className="text-center mb-10">
+        <h1
+          onClick={handleNavHome}
+          className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary mb-2 tracking-tight cursor-pointer"
+        >
+          Petty Meter
+        </h1>
+        <div className="text-sm font-medium text-gray-500 bg-white/50 inline-block px-4 py-1 rounded-full backdrop-blur-sm border border-white">
+          💡 Fact: {randomFact}
+        </div>
+      </header>
       <HistoryManager
         ref={historyManagerRef}
         onSelectHistory={handleSelectHistory}

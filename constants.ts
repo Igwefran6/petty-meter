@@ -27,7 +27,7 @@ export const ZONES: PettinessZone[] = [
     max: 80,
     label: "Peak Pettiness",
     color: "#FF006E",
-    message: "Girl, Please...",
+    message: "Bro, Please...",
   },
   {
     min: 81,
