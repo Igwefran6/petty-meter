@@ -13,8 +13,8 @@ export default function NotFound() {
       </h1>
 
       <p className="text-lg md:text-xl text-muted mb-8 max-w-md">
-        Unlike your ex, we'll tell you straight up: this page doesn't exist.
-        It's giving... invisible.
+        We'll tell you straight up: this page doesn't exist. It's giving...
+        invisible.
       </p>
 
       <Link
