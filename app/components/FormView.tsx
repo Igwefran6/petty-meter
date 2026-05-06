@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Send, Scale } from "lucide-react";
+import { useTypewriter } from "react-simple-typewriter";
 import { Mode, FormData } from "@/types";
 import { useSound } from "@/hooks/useSound";
 
@@ -10,6 +11,7 @@ interface FormViewProps {
   onSubmit: (data: FormData) => void;
   loadingMessage: string;
 }
+
 
 export const FormView: React.FC<FormViewProps> = ({
   mode,
@@ -47,8 +49,13 @@ export const FormView: React.FC<FormViewProps> = ({
         "They're upset their coffee had too much foam...",
       ];
 
-  const randomPlaceholder =
-    placeholders[Math.floor(Math.random() * placeholders.length)];
+  const [typewriterPlaceholder] = useTypewriter({
+    words: placeholders,
+    loop: 0,
+    typeSpeed: 50,
+    deleteSpeed: 25,
+    delaySpeed: 2000,
+  });
 
   if (isLoading) {
     return (
@@ -119,7 +126,7 @@ export const FormView: React.FC<FormViewProps> = ({
         <textarea
           value={grievance}
           onChange={(e) => setGrievance(e.target.value)}
-          placeholder={randomPlaceholder}
+          placeholder={typewriterPlaceholder}
           rows={4}
           className="w-full p-4 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-primary focus:bg-white transition-all outline-none resize-none font-medium"
         />

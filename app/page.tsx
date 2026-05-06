@@ -20,7 +20,7 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="mt-12 text-center text-xs text-gray-400 pb-8">
-          <p>Francis said it's made for laughs, not legal advice.</p>
+          <p>Made for laughs, not legal advice.</p>
         </footer>
       </div>
     </div>

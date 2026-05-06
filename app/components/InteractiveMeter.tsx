@@ -168,7 +168,7 @@ export const InteractiveMeter = forwardRef<
         <AnimatePresence mode="wait">
           {!result ? (
             <FormView
-              key="form"
+              key={mode}
               mode={mode}
               isLoading={isLoading}
               loadingMessage={loadingMsg}
