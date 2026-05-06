@@ -39,11 +39,21 @@ export const ZONES: PettinessZone[] = [
 ];
 
 export const FUN_FACTS = [
-  "82% of people think they're less petty than they are.",
-  "Most petty complaints happen on Monday mornings.",
-  "The #1 petty grievance? Slow walkers.",
-  "Hunger is the leading cause of accidental pettiness.",
-  "Pettiness levels spike 300% when text messages are left on read.",
+  "97% of people admit to petty behavior. You're statistically normal.",
+  "Your brain remembers insults 5× longer than compliments. It's literally wired to hold grudges.",
+  "It takes 5 positive interactions to cancel out 1 negative one. The math is not in your favor bro.",
+  "The silent treatment activates the same brain signals as physical pain. Ignoring someone actually hurts them Karen.",
+  "33% of workers admit to stealing coworkers' food and 71% have had their food stolen.",
+  "Hunger accounts for 37% of your irritability. You might just need a snack Jessie.",
+  "Office thermostats were designed in the 1960s for a 154-pound man's metabolism. Women have been cold ever since.",
+  "Men prefer 72°F, women prefer 77°F. The thermostat war is literally biological.",
+  "Dummy thermostats make workers happier and more productive. Fake control beats real temperature.",
+  "Violent crime is 10% higher on extremely hot days. Heat doesn't just make you sweaty.",
+  "38% of voters have unfollowed someone over political disagreement. Blocking is the new debate.",
+  "People avoid opening messages just to escape the pressure of read receipts.",
+  "Walking in groups slows everyone down by 15–20%. Slow walkers might just have friends.",
+  "Workplace drama costs the global economy $364 billion a year. Pettiness has a GDP.",
+  "Women perform better cognitively in warmer rooms, men in cooler ones — so someone always loses.",
 ];
 
 export const LOADING_MESSAGES = [

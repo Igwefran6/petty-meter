@@ -13,13 +13,20 @@ export const ClientWrapper: React.FC<{ randomFact: string }> = ({
   randomFact,
 }) => {
   const initialIndex = FUN_FACTS.indexOf(randomFact);
-  const [factIndex, setFactIndex] = useState(initialIndex === -1 ? 0 : initialIndex);
+  const safeInitial = initialIndex === -1 ? 0 : initialIndex;
+  const [factIndex, setFactIndex] = useState(safeInitial);
   const [tooltipOpen, setTooltipOpen] = useState(false);
+  const cooldown = useRef<number[]>([safeInitial]);
   const historyManagerRef = useRef<HistoryManagerHandle | null>(null);
 
   useEffect(() => {
     const id = setInterval(() => {
-      setFactIndex((i) => (i + 1) % FUN_FACTS.length);
+      const allIndices = FUN_FACTS.map((_, i) => i);
+      const eligible = allIndices.filter((i) => !cooldown.current.includes(i));
+      const pool = eligible.length > 0 ? eligible : allIndices;
+      const next = pool[Math.floor(Math.random() * pool.length)];
+      cooldown.current = [next, ...cooldown.current].slice(0, 3);
+      setFactIndex(next);
     }, 4000);
     return () => clearInterval(id);
   }, []);
@@ -62,7 +69,7 @@ export const ClientWrapper: React.FC<{ randomFact: string }> = ({
           <div
             onMouseEnter={() => setTooltipOpen(true)}
             onMouseLeave={() => setTooltipOpen(false)}
-            className="text-sm font-medium text-gray-500 bg-white/50 inline-flex items-center gap-1 px-4 py-1 rounded-full backdrop-blur-sm border border-white overflow-hidden w-96 cursor-default"
+            className="text-sm font-medium text-gray-500 bg-white/50 inline-flex items-center gap-1 px-4 py-1 rounded-full backdrop-blur-sm border border-white overflow-hidden w-72 sm:w-96 cursor-default"
           >
             <span className="shrink-0">💡 Fact:</span>
             <AnimatePresence mode="wait">
