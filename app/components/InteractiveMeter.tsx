@@ -21,7 +21,7 @@ interface InteractiveMeterProps {
 }
 
 export interface InteractiveMeterHandle {
-  showHistoryItem: (mode: Mode, name: string, result: AnalysisResult) => void;
+  showHistoryItem: (mode: Mode, name: string, result: AnalysisResult, grievance: string) => void;
   reset: () => void;
 }
 
@@ -34,6 +34,7 @@ export const InteractiveMeter = forwardRef<
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState(LOADING_MESSAGES[0]);
   const [subjectName, setSubjectName] = useState<string>("");
+  const [grievance, setGrievance] = useState<string>("");
 
   const { playClick, playSuccess } = useSound();
   const { showToast } = useToast();
@@ -54,11 +55,13 @@ export const InteractiveMeter = forwardRef<
     showHistoryItem: (
       selectedMode: Mode,
       selectedName: string,
-      selectedResult: AnalysisResult
+      selectedResult: AnalysisResult,
+      selectedGrievance: string
     ) => {
       setMode(selectedMode);
       setSubjectName(selectedName);
       setResult(selectedResult);
+      setGrievance(selectedGrievance);
 
       // Smooth scroll to top
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -79,6 +82,7 @@ export const InteractiveMeter = forwardRef<
   const handleSubmit = async (data: FormData) => {
     setIsLoading(true);
     setSubjectName(data.name);
+    setGrievance(data.grievance);
     try {
       const response = await analyzeGrievanceAction(
         data.grievance,
@@ -113,6 +117,7 @@ export const InteractiveMeter = forwardRef<
     playClick();
     setResult(null);
     setSubjectName("");
+    setGrievance("");
   };
 
   return (
@@ -180,6 +185,7 @@ export const InteractiveMeter = forwardRef<
               result={result}
               mode={mode}
               name={subjectName}
+              grievance={grievance}
               onReset={handleReset}
             />
           )}

@@ -11,6 +11,7 @@ interface ResultViewProps {
   result: AnalysisResult;
   mode: Mode;
   name?: string;
+  grievance: string;
   onReset: () => void;
 }
 
@@ -18,6 +19,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
   result,
   mode,
   name,
+  grievance,
   onReset,
 }) => {
   const isSelf = mode === Mode.SELF;
@@ -111,7 +113,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
     >
       <div
         ref={cardRef}
-        className="bg-white rounded-4xl shadow-2xl p-6 md:p-8 border-b-8 relative overflow-hidden flex flex-col"
+        className="bg-white rounded-4xl shadow-2xl p-6 md:p-8 border-b-2 relative overflow-hidden flex flex-col"
         style={{ borderColor: result.score > 50 ? "#FF006E" : "#8AC926" }}
       >
         <div className="absolute -top-6 -right-6 w-24 h-24 bg-orange-50 rounded-full flex items-center justify-center pt-6 pr-6">
@@ -132,6 +134,15 @@ export const ResultView: React.FC<ResultViewProps> = ({
         <Gauge score={result.score} />
 
         <div className="mt-6 space-y-4 relative z-10">
+          <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 shadow-sm">
+            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">
+              The Complaint
+            </h3>
+            <p className="text-dark leading-relaxed font-medium text-sm italic">
+              "{grievance}"
+            </p>
+          </div>
+
           <div className="bg-bgLight p-4 rounded-2xl border border-orange-100 shadow-sm">
             <h3 className="text-[10px] font-black text-primary uppercase tracking-widest mb-2 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
@@ -143,7 +154,8 @@ export const ResultView: React.FC<ResultViewProps> = ({
           </div>
 
           <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100 shadow-sm">
-            <h3 className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">
+            <h3 className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
               Reality Check
             </h3>
             <p className="text-dark leading-relaxed font-medium text-sm">
@@ -187,10 +199,6 @@ export const ResultView: React.FC<ResultViewProps> = ({
           </button>
         </div>
       </div>
-
-      <p className="text-center text-[10px] text-gray-400 mt-6 font-bold uppercase tracking-widest opacity-40">
-        Strictly for entertainment & tea-sipping purposes
-      </p>
     </motion.div>
   );
 };

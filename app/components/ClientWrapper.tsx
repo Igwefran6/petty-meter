@@ -39,9 +39,10 @@ export const ClientWrapper: React.FC<{ randomFact: string }> = ({
   const handleSelectHistory = (
     mode: Mode,
     name: string,
-    result: AnalysisResult
+    result: AnalysisResult,
+    grievance: string
   ) => {
-    interactiveMeterRef.current?.showHistoryItem(mode, name, result);
+    interactiveMeterRef.current?.showHistoryItem(mode, name, result, grievance);
   };
 
   const handleNavHome = () => {

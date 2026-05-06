@@ -171,7 +171,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                   for entertainment.
                   <br />
                   <span className="text-[10px] opacity-70 italic block mt-2">
-                    *Source: Trust me bro
+                    Source: Just trust me
                   </span>
                 </p>
 

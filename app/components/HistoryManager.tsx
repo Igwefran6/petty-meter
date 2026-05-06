@@ -10,13 +10,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { HistoryItem, Mode, AnalysisResult } from "@/types";
 import { getHistoryAction, saveHistoryAction } from "../actions";
 import { HistoryView } from "./HistoryView";
-import { History as HistoryIcon, X } from "lucide-react";
 import { useSound } from "@/hooks/useSound";
 import { useToast } from "../context/ToastContext";
 import { ConfirmModal } from "./ui/ConfirmModal";
 
 interface HistoryManagerProps {
-  onSelectHistory?: (mode: Mode, name: string, result: AnalysisResult) => void;
+  onSelectHistory?: (mode: Mode, name: string, result: AnalysisResult, grievance: string) => void;
 }
 
 export interface HistoryManagerHandle {
@@ -65,7 +64,7 @@ export const HistoryManager = forwardRef<
   const handleSelectHistory = (item: HistoryItem) => {
     playPop();
     if (onSelectHistory) {
-      onSelectHistory(item.mode, item.name || "", item.result);
+      onSelectHistory(item.mode, item.name || "", item.result, item.grievance);
     }
     setIsOpen(false);
   };

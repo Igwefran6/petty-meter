@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { analyzeGrievance } from "@/services/geminiService";
+import { analyzeGrievance } from "@/services/claudeService";
 import { AnalysisResult, Mode, HistoryItem } from "@/types";
 
 const HISTORY_COOKIE_NAME = "pettiness_history";
