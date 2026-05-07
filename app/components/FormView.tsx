@@ -95,7 +95,7 @@ export const FormView: React.FC<FormViewProps> = ({
           <Scale size={24} />
         </div>
         <h2 className="text-2xl font-bold text-dark">
-          {isSelf ? "How Petty Are You?" : "Is Your Friend Ridiculous?"}
+          {isSelf ? "How Petty Are You?" : "How Ridiculous Are They?"}
         </h2>
         <p className="text-muted mt-1">
           {isSelf

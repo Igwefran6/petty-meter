@@ -1,7 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { History, Trash2, ChevronRight, Calendar } from "lucide-react";
-import { HistoryItem } from "@/types";
+import { HistoryItem, Mode } from "@/types";
 import { ZONES } from "@/constants";
 
 interface HistoryViewProps {
@@ -55,14 +55,18 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
       <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 py-2 custom-scrollbar">
         <AnimatePresence initial={false}>
           {history.map((item, index) => {
-            const zone =
-              ZONES.find(
-                (z) => item.result.score >= z.min && item.result.score <= z.max
-              ) || ZONES[0];
-            const date = new Date(item.timestamp).toLocaleDateString(
-              undefined,
-              { month: "short", day: "numeric" }
-            );
+            const isBattle = item.mode === Mode.BATTLE;
+            const zone = isBattle
+              ? null
+              : ZONES.find((z) => item.result.score >= z.min && item.result.score <= z.max) || ZONES[0];
+            const date = new Date(item.timestamp).toLocaleDateString(undefined, {
+              month: "short", day: "numeric",
+            });
+            const p1Name = item.battle?.player1Name || "Contender 1";
+            const p2Name = item.battle?.player2Name || "Contender 2";
+            const winnerName = item.battle
+              ? (item.battle.result.winner === 1 ? p1Name : p2Name)
+              : null;
 
             return (
               <motion.div
@@ -77,12 +81,23 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                 {/* Score Badge */}
                 <div
                   className="w-14 h-14 rounded-xl flex flex-col items-center justify-center shrink-0 text-white font-black shadow-sm"
-                  style={{ backgroundColor: zone.color }}
+                  style={{ backgroundColor: isBattle ? "#8338EC" : zone?.color }}
                 >
-                  <span className="text-lg">{item.result.score}%</span>
-                  <span className="text-[7px] uppercase tracking-tighter opacity-80 leading-none">
-                    Petty
-                  </span>
+                  {isBattle ? (
+                    <>
+                      <span className="text-xl">⚔️</span>
+                      <span className="text-[7px] uppercase tracking-tighter opacity-80 leading-none">
+                        Battle
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-lg">{item.result.score}%</span>
+                      <span className="text-[7px] uppercase tracking-tighter opacity-80 leading-none">
+                        Petty
+                      </span>
+                    </>
+                  )}
                 </div>
 
                 {/* Content Summary */}
@@ -90,12 +105,14 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                   <div className="flex items-center gap-2 mb-0.5">
                     <span
                       className={`text-[10px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded ${
-                        item.mode === "self"
+                        isBattle
+                          ? "bg-purple-100 text-petty"
+                          : item.mode === "self"
                           ? "bg-orange-100 text-primary"
                           : "bg-pink-100 text-secondary"
                       }`}
                     >
-                      {item.mode === "self" ? "Self" : "Other"}
+                      {isBattle ? "⚔️ Battle" : item.mode === "self" ? "Self" : "Other"}
                     </span>
                     <span className="text-[10px] font-bold text-gray-300 flex items-center gap-1">
                       <Calendar size={10} />
@@ -103,22 +120,23 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                     </span>
                   </div>
                   <h4 className="font-bold text-dark truncate">
-                    {item.mode === "self"
+                    {isBattle
+                      ? `${p1Name} vs ${p2Name}`
+                      : item.mode === "self"
                       ? "Your Grievance"
                       : `${item.name || "Someone"}'s Drama`}
                   </h4>
                   <p className="text-xs text-muted truncate italic">
-                    "{item.grievance}"
+                    {isBattle
+                      ? winnerName ? `👑 ${winnerName} wins` : ""
+                      : `"${item.grievance}"`}
                   </p>
                 </div>
 
                 {/* Action / Icon */}
                 <div className="flex flex-col items-end gap-2 shrink-0">
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDeleteOne(item.id);
-                    }}
+                    onClick={(e) => { e.stopPropagation(); onDeleteOne(item.id); }}
                     className="p-2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                   >
                     <Trash2 size={16} />

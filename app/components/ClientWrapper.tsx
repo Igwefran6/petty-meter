@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { HistoryItem, Mode, AnalysisResult, PersonaId } from "@/types";
+import { HistoryItem, Mode, AnalysisResult, PersonaId, BattleHistoryData } from "@/types";
 import { MomentRecord } from "@/lib/statsStorage";
 import { FUN_FACTS } from "@/constants";
 import { InteractiveMeter, InteractiveMeterHandle } from "./InteractiveMeter";
@@ -42,13 +42,12 @@ export const ClientWrapper: React.FC<{ randomFact: string }> = ({
     historyManagerRef.current?.addToHistory(item);
   };
 
-  const handleSelectHistory = (
-    mode: Mode,
-    name: string,
-    result: AnalysisResult,
-    grievance: string
-  ) => {
-    interactiveMeterRef.current?.showHistoryItem(mode, name, result, grievance);
+  const handleSelectHistory = (item: HistoryItem) => {
+    if (item.mode === Mode.BATTLE && item.battle) {
+      interactiveMeterRef.current?.showBattleItem(item.battle as BattleHistoryData);
+    } else {
+      interactiveMeterRef.current?.showHistoryItem(item.mode, item.name ?? "", item.result, item.grievance);
+    }
   };
 
   const handleNavHome = () => {

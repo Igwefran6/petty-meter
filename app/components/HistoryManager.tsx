@@ -7,7 +7,7 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { HistoryItem, Mode, AnalysisResult } from "@/types";
+import { HistoryItem } from "@/types";
 import { getHistoryAction, saveHistoryAction } from "../actions";
 import { HistoryView } from "./HistoryView";
 import { useSound } from "@/hooks/useSound";
@@ -15,7 +15,7 @@ import { useToast } from "../context/ToastContext";
 import { ConfirmModal } from "./ui/ConfirmModal";
 
 interface HistoryManagerProps {
-  onSelectHistory?: (mode: Mode, name: string, result: AnalysisResult, grievance: string) => void;
+  onSelectHistory?: (item: HistoryItem) => void;
 }
 
 export interface HistoryManagerHandle {
@@ -63,9 +63,7 @@ export const HistoryManager = forwardRef<
 
   const handleSelectHistory = (item: HistoryItem) => {
     playPop();
-    if (onSelectHistory) {
-      onSelectHistory(item.mode, item.name || "", item.result, item.grievance);
-    }
+    onSelectHistory?.(item);
     setIsOpen(false);
   };
 

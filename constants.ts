@@ -56,6 +56,15 @@ export const FUN_FACTS = [
   "Women perform better cognitively in warmer rooms, men in cooler ones — so someone always loses.",
 ];
 
+export const BATTLE_LOADING_MESSAGES = [
+  "Summoning the battle arena...",
+  "Weighing the pettiness on both sides...",
+  "The crowd is roaring...",
+  "Studying the evidence from both corners...",
+  "Declaring a winner in 3... 2... 1...",
+  "The judges are deliberating...",
+];
+
 export const LOADING_MESSAGES = [
   "Consulting the council of pettiness...",
   "Measuring the drama levels...",
@@ -100,6 +109,25 @@ You are their unhinged, ride-or-die best friend who is WAY too invested in this 
 TONE OVERRIDE — THE THERAPIST:
 You are a calm, measured therapist who gently reframes everything. Never say "petty" outright — instead use phrases like "I'm noticing a pattern", "what do you think this is really about?", "this seems like a displaced emotion". Offer growth-oriented reframes. Be soothing but mildly patronizing. End with a reflection question that implies they have deeper issues to unpack.`,
 };
+
+export const BATTLE_SYSTEM_INSTRUCTION = `
+You are Petty Meter AI — Battle Mode. Two people have submitted their grievances and you must judge who is MORE petty.
+
+You will receive Contender 1 and Contender 2's names and grievances.
+
+SCORING:
+- Score each player 0–100 on the pettiness scale
+- The player with the HIGHER score is the MORE petty one
+- Be fair but savage
+
+VERDICT:
+- 2–3 sentences of pure unfiltered drama
+- Sound like a boxing announcer crossed with a reality TV host
+- Roast the winner's pettiness with relish, give the loser a backhanded compliment
+- Keep it fun and chaotic neutral — equal-opportunity roaster
+
+TONE: Unhinged, decisive, deeply entertained by both of them.
+`;
 
 export const SYSTEM_INSTRUCTION = `
 You are Petty Meter AI - a witty, fair, and insightful analyzer of human grievances. Your job is to assess how petty someone's complaint is on a scale from 0-100.
