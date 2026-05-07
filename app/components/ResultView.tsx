@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { RefreshCcw, Share2, Loader2, Award } from "lucide-react";
+import { RefreshCcw, Share2, Loader2, Award, Twitter, Copy } from "lucide-react";
 import confetti from "canvas-confetti";
 import { AnalysisResult, Mode } from "@/types";
+import { ZONES } from "@/constants";
 import { Gauge } from "./Gauge";
 import { useSound } from "@/hooks/useSound";
 import { useToast } from "../context/ToastContext";
@@ -30,6 +31,50 @@ export const ResultView: React.FC<ResultViewProps> = ({
   const [isSharing, setIsSharing] = useState(false);
   const { playClick, playError } = useSound();
   const { showToast } = useToast();
+
+  const zone = ZONES.find((z) => result.score >= z.min && result.score <= z.max);
+
+  const TWEET_LINES: Record<string, string> = {
+    "Legitimate Concern": `I just got rated ${result.score}% petty — turns out I'm NOT the problem 😇`,
+    "Minor Annoyance":    `Okay, ${result.score}% petty. Minor annoyance energy, I admit it 😤`,
+    "Getting Petty":      `${result.score}% petty and I'm fully aware 👀 Petty Meter called me out`,
+    "Peak Pettiness":     `Peak Pettiness unlocked 💅 ${result.score}% petty and I can't even deny it`,
+    "Let It Go":          `I have been EXPOSED 💀 ${result.score}% petty. I need help.`,
+  };
+
+  const handleTwitterShare = () => {
+    playClick();
+    const line = zone ? TWEET_LINES[zone.label] : `I scored ${result.score}% on Petty Meter!`;
+    const url = "https://pettymeter.vercel.app";
+    const tweet = `${line}\n\nFind out yours 👇 ${url}`;
+    window.open(
+      `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`,
+      "_blank"
+    );
+  };
+
+  const handleCopy = async () => {
+    playClick();
+    const text = [
+      `⚖️ Petty Meter Result`,
+      `Score: ${result.score}% — ${zone?.label ?? "Unknown"}`,
+      ``,
+      `Complaint: "${grievance}"`,
+      ``,
+      `Analysis: ${result.analysis}`,
+      ``,
+      `Reality Check: ${result.advice}`,
+      ``,
+      `Try it yourself → https://pettymeter.vercel.app`,
+    ].join("\n");
+
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast("Result copied to clipboard! 📋", "success");
+    } catch {
+      showToast("Couldn't copy — try manually!", "error");
+    }
+  };
 
   useEffect(() => {
     if (isError) {
@@ -245,18 +290,34 @@ export const ResultView: React.FC<ResultViewProps> = ({
               <button
                 onClick={() => { playClick(); onReset(); }}
                 disabled={isSharing}
-                className="flex-1 flex items-center justify-center gap-2 py-4 px-4 rounded-2xl bg-gray-100 text-dark font-bold hover:bg-gray-200 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+                title="Try Again"
+                className="flex-1 flex items-center justify-center py-4 px-4 rounded-2xl bg-gray-100 text-dark hover:bg-gray-200 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
               >
-                <RefreshCcw size={18} />
-                Try Again
+                <RefreshCcw size={20} />
               </button>
               <button
                 onClick={handleShare}
                 disabled={isSharing}
-                className="flex-1 flex items-center justify-center gap-2 py-4 px-4 rounded-2xl bg-primary text-white font-bold hover:bg-orange-600 transition-all active:scale-95 shadow-lg shadow-orange-200 disabled:opacity-80 cursor-pointer"
+                title="Share Result"
+                className="flex-1 flex items-center justify-center py-4 px-4 rounded-2xl bg-primary text-white hover:bg-orange-600 transition-all active:scale-95 shadow-lg shadow-orange-200 disabled:opacity-80 cursor-pointer"
               >
-                {isSharing ? <Loader2 size={18} className="animate-spin" /> : <Share2 size={18} />}
-                {isSharing ? "Capturing..." : "Share Result"}
+                {isSharing ? <Loader2 size={20} className="animate-spin" /> : <Share2 size={20} />}
+              </button>
+              <button
+                onClick={handleTwitterShare}
+                disabled={isSharing}
+                title="Post on X"
+                className="flex-1 flex items-center justify-center py-4 px-4 rounded-2xl bg-black text-white hover:bg-gray-900 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+              >
+                <Twitter size={20} />
+              </button>
+              <button
+                onClick={handleCopy}
+                disabled={isSharing}
+                title="Copy Result"
+                className="flex-1 flex items-center justify-center py-4 px-4 rounded-2xl bg-gray-100 text-dark hover:bg-gray-200 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+              >
+                <Copy size={20} />
               </button>
             </>
           )}
