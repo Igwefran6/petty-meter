@@ -28,51 +28,36 @@ export const Navigation: React.FC<NavigationProps> = ({
       id: "coffee",
       icon: <Coffee size={20} />,
       label: "Fuel Me",
-      action: () => {
-        playClick();
-        onCoffee();
-      },
-      className: "bg-white",
+      action: () => { playClick(); onCoffee(); },
+      btnClass: "bg-white text-gray-400 hover:text-pink-500",
     },
     {
       id: "stats",
       icon: <Trophy size={20} />,
       label: "My Stats",
-      action: () => {
-        playClick();
-        onStats();
-      },
-      className: "bg-white text-yellow-500",
+      action: () => { playClick(); onStats(); },
+      btnClass: "bg-white text-yellow-500",
     },
     {
       id: "info",
       icon: <Info size={20} />,
       label: "The Tea",
-      action: () => {
-        playClick();
-        setShowInfo(true);
-      },
-      className: "bg-white text-gray-600",
+      action: () => { playClick(); setShowInfo(true); },
+      btnClass: "bg-white text-gray-400 hover:text-sky-500",
     },
     {
       id: "history",
       icon: <ScrollText size={20} />,
       label: "Receipts",
-      action: () => {
-        playPop();
-        onHistory();
-      },
-      className: "bg-white text-gray-600",
+      action: () => { playPop(); onHistory(); },
+      btnClass: "bg-white text-gray-400 hover:text-violet-500",
     },
     {
       id: "home",
       icon: <Home size={20} />,
       label: "New Audit",
-      action: () => {
-        playClick();
-        onHome();
-      },
-      className: "bg-white text-primary",
+      action: () => { playClick(); onHome(); },
+      btnClass: "bg-white text-gray-400 hover:text-orange-500",
     },
   ];
 
@@ -119,7 +104,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                       item.action();
                       setIsOpen(false);
                     }}
-                    className={`w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 active:scale-95 cursor-pointer ${item.className}`}
+                    className={`w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 cursor-pointer ${item.btnClass}`}
                   >
                     {item.icon}
                   </button>
