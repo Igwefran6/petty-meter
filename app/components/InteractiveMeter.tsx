@@ -100,18 +100,19 @@ export const InteractiveMeter = forwardRef<
         data.name
       );
       setResult(response);
-      if (response.category !== "Error") playSuccess();
 
-      // Save to history
-      const newItem: HistoryItem = {
-        id: crypto.randomUUID(),
-        mode,
-        name: data.name,
-        grievance: data.grievance,
-        result: response,
-        timestamp: Date.now(),
-      };
-      onHistoryAdd(newItem);
+      if (response.category !== "Error") {
+        playSuccess();
+        const newItem: HistoryItem = {
+          id: crypto.randomUUID(),
+          mode,
+          name: data.name,
+          grievance: data.grievance,
+          result: response,
+          timestamp: Date.now(),
+        };
+        onHistoryAdd(newItem);
+      }
     } catch (e) {
       console.error(e);
       showToast(
