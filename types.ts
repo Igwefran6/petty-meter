@@ -18,6 +18,8 @@ export interface PettinessZone {
   message: string;
 }
 
+export type PersonaId = "judge" | "bestie" | "therapist";
+
 export interface FormData {
   grievance: string;
   name: string; // Only used in OTHER mode

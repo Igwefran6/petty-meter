@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { analyzeGrievance } from "@/services/claudeService";
-import { AnalysisResult, Mode, HistoryItem } from "@/types";
+import { AnalysisResult, Mode, HistoryItem, PersonaId } from "@/types";
 
 const HISTORY_COOKIE_NAME = "pettiness_history";
 const MAX_COOKIE_SIZE = 4000; // Safe limit for cookie size
@@ -13,9 +13,10 @@ const MAX_COOKIE_SIZE = 4000; // Safe limit for cookie size
 export async function analyzeGrievanceAction(
   grievance: string,
   mode: Mode,
-  name?: string
+  name?: string,
+  persona?: PersonaId
 ): Promise<AnalysisResult> {
-  return await analyzeGrievance(grievance, mode, name);
+  return await analyzeGrievance(grievance, mode, name, persona);
 }
 
 /**

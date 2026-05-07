@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { HistoryItem, Mode, AnalysisResult } from "@/types";
+import { HistoryItem, Mode, AnalysisResult, PersonaId } from "@/types";
 import { MomentRecord } from "@/lib/statsStorage";
 import { FUN_FACTS } from "@/constants";
 import { InteractiveMeter, InteractiveMeterHandle } from "./InteractiveMeter";
@@ -10,6 +10,7 @@ import { HistoryManager, HistoryManagerHandle } from "./HistoryManager";
 import { ToastProvider } from "../context/ToastContext";
 import { Navigation } from "./Navigation";
 import { StatsModal } from "./StatsModal";
+import { SettingsModal } from "./SettingsModal";
 
 export const ClientWrapper: React.FC<{ randomFact: string }> = ({
   randomFact,
@@ -19,6 +20,8 @@ export const ClientWrapper: React.FC<{ randomFact: string }> = ({
   const [factIndex, setFactIndex] = useState(safeInitial);
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [persona, setPersona] = useState<PersonaId>("judge");
   const cooldown = useRef<number[]>([safeInitial]);
   const historyManagerRef = useRef<HistoryManagerHandle | null>(null);
 
@@ -62,6 +65,10 @@ export const ClientWrapper: React.FC<{ randomFact: string }> = ({
 
   const handleNavStats = () => {
     setStatsOpen(true);
+  };
+
+  const handleNavSettings = () => {
+    setSettingsOpen(true);
   };
 
   const handleViewMoment = (moment: MomentRecord) => {
@@ -133,14 +140,22 @@ export const ClientWrapper: React.FC<{ randomFact: string }> = ({
       <InteractiveMeter
         ref={interactiveMeterRef}
         onHistoryAdd={handleHistoryAdd}
+        persona={persona}
       />
       <Navigation
         onHome={handleNavHome}
         onHistory={handleNavHistory}
         onCoffee={handleNavCoffee}
         onStats={handleNavStats}
+        onSettings={handleNavSettings}
       />
       <StatsModal isOpen={statsOpen} onClose={() => setStatsOpen(false)} onViewMoment={handleViewMoment} />
+      <SettingsModal
+        isOpen={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        persona={persona}
+        onPersonaChange={setPersona}
+      />
     </ToastProvider>
   );
 };

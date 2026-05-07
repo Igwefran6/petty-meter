@@ -8,7 +8,7 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Mode, AnalysisResult, FormData, HistoryItem } from "@/types";
+import { Mode, AnalysisResult, FormData, HistoryItem, PersonaId } from "@/types";
 import { analyzeGrievanceAction } from "../actions";
 import { FormView } from "./FormView";
 import { ResultView } from "./ResultView";
@@ -21,6 +21,7 @@ import { checkNewAchievements } from "@/lib/achievements";
 
 interface InteractiveMeterProps {
   onHistoryAdd: (item: HistoryItem) => void;
+  persona: PersonaId;
 }
 
 export interface InteractiveMeterHandle {
@@ -31,7 +32,7 @@ export interface InteractiveMeterHandle {
 export const InteractiveMeter = forwardRef<
   InteractiveMeterHandle,
   InteractiveMeterProps
->(({ onHistoryAdd }, ref) => {
+>(({ onHistoryAdd, persona }, ref) => {
   const [mode, setMode] = useState<Mode>(Mode.SELF);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -99,7 +100,8 @@ export const InteractiveMeter = forwardRef<
       const response = await analyzeGrievanceAction(
         data.grievance,
         mode,
-        data.name
+        data.name,
+        persona
       );
       setResult(response);
 

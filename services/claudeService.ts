@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { AnalysisResult, Mode } from "@/types";
-import { SYSTEM_INSTRUCTION } from "@/constants";
+import { AnalysisResult, Mode, PersonaId } from "@/types";
+import { SYSTEM_INSTRUCTION, PERSONA_INSTRUCTIONS } from "@/constants";
 import "server-only";
 
 const client = new Anthropic({ apiKey: process.env.CLAUDE_APIKEY });
@@ -13,7 +13,8 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 export const analyzeGrievance = async (
   grievance: string,
   mode: Mode,
-  name?: string
+  name?: string,
+  persona: PersonaId = "judge"
 ): Promise<AnalysisResult> => {
   if (!process.env.CLAUDE_APIKEY) {
     throw new Error(
@@ -32,7 +33,7 @@ export const analyzeGrievance = async (
       const response = await client.messages.create({
         model: "claude-sonnet-4-6",
         max_tokens: 1024,
-        system: SYSTEM_INSTRUCTION,
+        system: SYSTEM_INSTRUCTION + PERSONA_INSTRUCTIONS[persona],
         tools: [
           {
             name: "submit_analysis",

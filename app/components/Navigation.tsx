@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, ScrollText, Coffee, Info, X, Menu, Trophy } from "lucide-react";
+import { Home, ScrollText, Coffee, Info, X, Menu, Trophy, Settings } from "lucide-react";
 import { useSound } from "@/hooks/useSound";
 
 interface NavigationProps {
@@ -10,6 +10,7 @@ interface NavigationProps {
   onHistory: () => void;
   onCoffee: () => void;
   onStats: () => void;
+  onSettings: () => void;
 }
 
 export const Navigation: React.FC<NavigationProps> = ({
@@ -17,6 +18,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   onHistory,
   onCoffee,
   onStats,
+  onSettings,
 }) => {
   const { playClick, playPop } = useSound();
   const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +26,13 @@ export const Navigation: React.FC<NavigationProps> = ({
 
   // Items ordered from BOTTOM to TOP (visually when stacked)
   const navItems = [
+    {
+      id: "settings",
+      icon: <Settings size={20} />,
+      label: "Settings",
+      action: () => { playClick(); onSettings(); },
+      btnClass: "bg-white text-gray-400 hover:text-emerald-500",
+    },
     {
       id: "coffee",
       icon: <Coffee size={20} />,
