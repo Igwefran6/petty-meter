@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, BarChart2, Lock } from "lucide-react";
-import { getStats, resetStats, StatsRecord } from "@/lib/statsStorage";
+import { getStats, resetStats, StatsRecord, MomentRecord } from "@/lib/statsStorage";
 import { ACHIEVEMENTS } from "@/lib/achievements";
 import { ZONES } from "@/constants";
 import { ConfirmModal } from "./ui/ConfirmModal";
@@ -13,9 +13,10 @@ import { useSound } from "@/hooks/useSound";
 interface StatsModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onViewMoment?: (moment: MomentRecord) => void;
 }
 
-export const StatsModal: React.FC<StatsModalProps> = ({ isOpen, onClose }) => {
+export const StatsModal: React.FC<StatsModalProps> = ({ isOpen, onClose, onViewMoment }) => {
   const [stats, setStats] = useState<StatsRecord | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const { showToast } = useToast();
@@ -128,9 +129,24 @@ export const StatsModal: React.FC<StatsModalProps> = ({ isOpen, onClose }) => {
 
                     {/* Pettiest Moment */}
                     {stats.pettiest && (
-                      <div className="bg-pink-50 rounded-2xl p-4 border border-pink-100">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-secondary mb-2">
-                          🏆 Pettiest Moment
+                      <div
+                        onClick={() => {
+                          if (stats.pettiest?.analysis && onViewMoment) {
+                            onViewMoment(stats.pettiest);
+                            onClose();
+                          }
+                        }}
+                        className={`bg-pink-50 rounded-2xl p-4 border border-pink-100 transition-all ${
+                          stats.pettiest.analysis && onViewMoment
+                            ? "cursor-pointer hover:shadow-md hover:scale-[1.02] active:scale-[0.99]"
+                            : ""
+                        }`}
+                      >
+                        <p className="text-[10px] font-black uppercase tracking-widest text-secondary mb-2 flex items-center justify-between">
+                          <span>🏆 Pettiest Moment</span>
+                          {stats.pettiest.analysis && onViewMoment && (
+                            <span className="text-pink-300 normal-case font-bold tracking-normal">View →</span>
+                          )}
                         </p>
                         <div className="flex items-center gap-3">
                           <span
@@ -151,9 +167,24 @@ export const StatsModal: React.FC<StatsModalProps> = ({ isOpen, onClose }) => {
 
                     {/* Most Valid Moment */}
                     {stats.mostValid && (
-                      <div className="bg-green-50 rounded-2xl p-4 border border-green-100">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-green-600 mb-2">
-                          ✅ Most Valid Moment
+                      <div
+                        onClick={() => {
+                          if (stats.mostValid?.analysis && onViewMoment) {
+                            onViewMoment(stats.mostValid);
+                            onClose();
+                          }
+                        }}
+                        className={`bg-green-50 rounded-2xl p-4 border border-green-100 transition-all ${
+                          stats.mostValid.analysis && onViewMoment
+                            ? "cursor-pointer hover:shadow-md hover:scale-[1.02] active:scale-[0.99]"
+                            : ""
+                        }`}
+                      >
+                        <p className="text-[10px] font-black uppercase tracking-widest text-green-600 mb-2 flex items-center justify-between">
+                          <span>✅ Most Valid Moment</span>
+                          {stats.mostValid.analysis && onViewMoment && (
+                            <span className="text-green-300 normal-case font-bold tracking-normal">View →</span>
+                          )}
                         </p>
                         <div className="flex items-center gap-3">
                           <span className="text-2xl font-black text-green-600 shrink-0">

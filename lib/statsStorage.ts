@@ -4,6 +4,11 @@ export interface MomentRecord {
   score: number;
   grievance: string;
   date: number;
+  analysis?: string;
+  advice?: string;
+  category?: string;
+  mode?: "self" | "other";
+  name?: string;
 }
 
 export interface StatsRecord {
@@ -55,13 +60,22 @@ export const resetStats = (): void => {
 export const updateStats = (
   score: number,
   grievance: string,
-  mode: "self" | "other"
+  mode: "self" | "other",
+  extra?: { analysis?: string; advice?: string; category?: string; name?: string }
 ): { prev: StatsRecord; next: StatsRecord } => {
   const prev = getStats();
   const now = Date.now();
 
   const isRedemptionArc =
     prev.hasEverScored80Plus && score < 10 && !prev.redemptionArc;
+
+  const moment: MomentRecord = {
+    score,
+    grievance,
+    date: now,
+    mode,
+    ...(extra ?? {}),
+  };
 
   const next: StatsRecord = {
     ...prev,
@@ -78,13 +92,9 @@ export const updateStats = (
         : prev.validUnder20Count,
     redemptionArc: prev.redemptionArc || isRedemptionArc,
     pettiest:
-      !prev.pettiest || score > prev.pettiest.score
-        ? { score, grievance, date: now }
-        : prev.pettiest,
+      !prev.pettiest || score > prev.pettiest.score ? moment : prev.pettiest,
     mostValid:
-      !prev.mostValid || score < prev.mostValid.score
-        ? { score, grievance, date: now }
-        : prev.mostValid,
+      !prev.mostValid || score < prev.mostValid.score ? moment : prev.mostValid,
     achievements: prev.achievements,
   };
 

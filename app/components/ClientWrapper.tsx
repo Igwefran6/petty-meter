@@ -3,6 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { HistoryItem, Mode, AnalysisResult } from "@/types";
+import { MomentRecord } from "@/lib/statsStorage";
 import { FUN_FACTS } from "@/constants";
 import { InteractiveMeter, InteractiveMeterHandle } from "./InteractiveMeter";
 import { HistoryManager, HistoryManagerHandle } from "./HistoryManager";
@@ -61,6 +62,22 @@ export const ClientWrapper: React.FC<{ randomFact: string }> = ({
 
   const handleNavStats = () => {
     setStatsOpen(true);
+  };
+
+  const handleViewMoment = (moment: MomentRecord) => {
+    if (!moment.analysis) return;
+    const result: AnalysisResult = {
+      score: moment.score,
+      analysis: moment.analysis,
+      advice: moment.advice ?? "",
+      category: moment.category ?? "",
+    };
+    interactiveMeterRef.current?.showHistoryItem(
+      moment.mode === "other" ? Mode.OTHER : Mode.SELF,
+      moment.name ?? "",
+      result,
+      moment.grievance
+    );
   };
 
   return (
@@ -123,7 +140,7 @@ export const ClientWrapper: React.FC<{ randomFact: string }> = ({
         onCoffee={handleNavCoffee}
         onStats={handleNavStats}
       />
-      <StatsModal isOpen={statsOpen} onClose={() => setStatsOpen(false)} />
+      <StatsModal isOpen={statsOpen} onClose={() => setStatsOpen(false)} onViewMoment={handleViewMoment} />
     </ToastProvider>
   );
 };

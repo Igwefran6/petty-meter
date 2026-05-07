@@ -103,7 +103,7 @@ export const InteractiveMeter = forwardRef<
       );
       setResult(response);
 
-      if (response.category !== "Error") {
+      if (response.category !== "Error" && response.score >= 0) {
         playSuccess();
         const newItem: HistoryItem = {
           id: crypto.randomUUID(),
@@ -116,7 +116,12 @@ export const InteractiveMeter = forwardRef<
         onHistoryAdd(newItem);
 
         // Update stats and check for newly earned achievements
-        const { prev, next } = updateStats(response.score, data.grievance, mode);
+        const { prev, next } = updateStats(response.score, data.grievance, mode, {
+          analysis: response.analysis,
+          advice: response.advice,
+          category: response.category,
+          name: data.name,
+        });
         const newBadges = checkNewAchievements(prev, next);
         newBadges.forEach((badge) => {
           setTimeout(() => {
