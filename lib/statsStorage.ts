@@ -1,4 +1,5 @@
 const STATS_KEY = "petty_meter_stats";
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
 export interface MomentRecord {
   score: number;
@@ -37,10 +38,23 @@ const DEFAULT_STATS: StatsRecord = {
   redemptionArc: false,
 };
 
+function readCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function writeCookie(name: string, value: string): void {
+  document.cookie = `${name}=${encodeURIComponent(value)};path=/;max-age=${COOKIE_MAX_AGE};samesite=lax`;
+}
+
+function deleteCookie(name: string): void {
+  document.cookie = `${name}=;path=/;max-age=0`;
+}
+
 export const getStats = (): StatsRecord => {
   if (typeof window === "undefined") return { ...DEFAULT_STATS };
   try {
-    const raw = localStorage.getItem(STATS_KEY);
+    const raw = readCookie(STATS_KEY);
     return raw ? { ...DEFAULT_STATS, ...JSON.parse(raw) } : { ...DEFAULT_STATS };
   } catch {
     return { ...DEFAULT_STATS };
@@ -49,12 +63,12 @@ export const getStats = (): StatsRecord => {
 
 export const saveStats = (stats: StatsRecord): void => {
   if (typeof window === "undefined") return;
-  localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+  writeCookie(STATS_KEY, JSON.stringify(stats));
 };
 
 export const resetStats = (): void => {
   if (typeof window === "undefined") return;
-  localStorage.removeItem(STATS_KEY);
+  deleteCookie(STATS_KEY);
 };
 
 export const updateStats = (

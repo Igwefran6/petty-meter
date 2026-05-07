@@ -16,7 +16,7 @@ import { LOADING_MESSAGES } from "@/constants";
 import { User, Users } from "lucide-react";
 import { useSound } from "@/hooks/useSound";
 import { useToast } from "../context/ToastContext";
-import { updateStats } from "@/lib/statsStorage";
+import { updateStats, unlockAchievement } from "@/lib/statsStorage";
 import { checkNewAchievements } from "@/lib/achievements";
 
 interface InteractiveMeterProps {
@@ -126,6 +126,7 @@ export const InteractiveMeter = forwardRef<
         });
         const newBadges = checkNewAchievements(prev, next);
         newBadges.forEach((badge) => {
+          unlockAchievement(badge.id);
           setTimeout(() => {
             showToast(`${badge.emoji} Achievement unlocked: ${badge.name}!`, "success");
           }, 1800);
