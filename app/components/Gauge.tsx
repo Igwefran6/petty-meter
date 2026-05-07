@@ -1,25 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, animate } from "framer-motion";
 import { ZONES } from "@/constants";
 import { useSound } from "@/hooks/useSound";
 
 interface GaugeProps {
   score: number;
+  isError?: boolean;
 }
 
-export const Gauge: React.FC<GaugeProps> = ({ score }) => {
+export const Gauge: React.FC<GaugeProps> = ({ score, isError = false }) => {
   const [displayScore, setDisplayScore] = useState(0);
   const { playTink } = useSound();
   const validScore = Math.max(0, Math.min(100, score === -1 ? 0 : score));
 
   useEffect(() => {
     if (score >= 0) {
-      setDisplayScore(validScore);
-      // Subtle sound when score settles
-      const timer = setTimeout(() => {
-        playTink();
-      }, 500);
-      return () => clearTimeout(timer);
+      const controls = animate(0, validScore, {
+        duration: 1.4,
+        ease: "easeOut",
+        onUpdate: (v) => setDisplayScore(Math.round(v)),
+      });
+      const timer = setTimeout(() => playTink(), 1400);
+      return () => {
+        controls.stop();
+        clearTimeout(timer);
+      };
     }
   }, [score, validScore, playTink]);
 
@@ -92,20 +97,17 @@ export const Gauge: React.FC<GaugeProps> = ({ score }) => {
 
       {/* Score Display */}
       <div className="mt-8 text-center">
-        <motion.div
-          className="text-6xl font-bold tracking-tighter"
-          key={displayScore}
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
+        <div
+          className="text-6xl font-bold tracking-tighter tabular-nums"
           style={{ color: currentZone.color }}
         >
           {score === -1 ? "?" : `${displayScore}%`}
-        </motion.div>
+        </div>
         <div className="text-xl font-bold text-dark mt-1">
-          {score === -1 ? "Invalid Input" : currentZone.label}
+          {score === -1 ? (isError ? "Service Unavailable" : "Invalid Input") : currentZone.label}
         </div>
         <div className="text-xs text-muted font-black uppercase tracking-[0.2em] mt-1">
-          {score === -1 ? "Try Again" : currentZone.message}
+          {score === -1 ? (isError ? "Try Again Below" : "Not A Grievance") : currentZone.message}
         </div>
       </div>
     </div>

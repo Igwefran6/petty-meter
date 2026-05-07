@@ -94,5 +94,27 @@ export const useSound = () => {
     osc.stop(ctx.currentTime + 0.05);
   }, []);
 
-  return { playClick, playPop, playSuccess, playTink };
+  const playError = useCallback(() => {
+    init();
+    const ctx = audioCtx.current!;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.exponentialRampToValueAtTime(110, now + 0.4);
+
+    gain.gain.setValueAtTime(0.0, now);
+    gain.gain.linearRampToValueAtTime(0.12, now + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.4);
+  }, []);
+
+  return { playClick, playPop, playSuccess, playTink, playError };
 };

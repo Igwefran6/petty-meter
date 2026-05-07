@@ -3,6 +3,7 @@
 import React, {
   useState,
   useEffect,
+  useRef,
   forwardRef,
   useImperativeHandle,
 } from "react";
@@ -35,6 +36,7 @@ export const InteractiveMeter = forwardRef<
   const [loadingMsg, setLoadingMsg] = useState(LOADING_MESSAGES[0]);
   const [subjectName, setSubjectName] = useState<string>("");
   const [grievance, setGrievance] = useState<string>("");
+  const lastFormData = useRef<FormData | null>(null);
 
   const { playClick, playSuccess } = useSound();
   const { showToast } = useToast();
@@ -79,7 +81,15 @@ export const InteractiveMeter = forwardRef<
     setSubjectName("");
   };
 
+  const handleRetry = () => {
+    if (lastFormData.current) {
+      setResult(null);
+      handleSubmit(lastFormData.current);
+    }
+  };
+
   const handleSubmit = async (data: FormData) => {
+    lastFormData.current = data;
     setIsLoading(true);
     setSubjectName(data.name);
     setGrievance(data.grievance);
@@ -90,7 +100,7 @@ export const InteractiveMeter = forwardRef<
         data.name
       );
       setResult(response);
-      playSuccess();
+      if (response.category !== "Error") playSuccess();
 
       // Save to history
       const newItem: HistoryItem = {
@@ -187,6 +197,7 @@ export const InteractiveMeter = forwardRef<
               name={subjectName}
               grievance={grievance}
               onReset={handleReset}
+              onRetry={handleRetry}
             />
           )}
         </AnimatePresence>

@@ -1,10 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { RefreshCcw, Share2, Loader2, Award } from "lucide-react";
+import confetti from "canvas-confetti";
 import { AnalysisResult, Mode } from "@/types";
 import { Gauge } from "./Gauge";
 import { useSound } from "@/hooks/useSound";
-
 import { useToast } from "../context/ToastContext";
 
 interface ResultViewProps {
@@ -13,6 +13,7 @@ interface ResultViewProps {
   name?: string;
   grievance: string;
   onReset: () => void;
+  onRetry: () => void;
 }
 
 export const ResultView: React.FC<ResultViewProps> = ({
@@ -21,12 +22,62 @@ export const ResultView: React.FC<ResultViewProps> = ({
   name,
   grievance,
   onReset,
+  onRetry,
 }) => {
   const isSelf = mode === Mode.SELF;
+  const isError = result.category === "Error";
   const cardRef = useRef<HTMLDivElement>(null);
   const [isSharing, setIsSharing] = useState(false);
-  const { playClick } = useSound();
+  const { playClick, playError } = useSound();
   const { showToast } = useToast();
+
+  useEffect(() => {
+    if (isError) {
+      playError();
+      return;
+    }
+    if (result.score === -1) return;
+
+    const timer = setTimeout(() => {
+      if (result.score >= 80) {
+        // Chaotic confetti burst for peak pettiness
+        confetti({
+          particleCount: 120,
+          spread: 80,
+          origin: { y: 0.5 },
+          colors: ["#FF006E", "#FF6B35", "#FFBE0B", "#8338EC"],
+        });
+        setTimeout(() => {
+          confetti({
+            particleCount: 60,
+            spread: 50,
+            origin: { x: 0.2, y: 0.6 },
+            colors: ["#FF006E", "#FF6B35"],
+          });
+          confetti({
+            particleCount: 60,
+            spread: 50,
+            origin: { x: 0.8, y: 0.6 },
+            colors: ["#FFBE0B", "#8338EC"],
+          });
+        }, 200);
+      } else if (result.score <= 20 && result.score >= 0) {
+        // Slow gentle fall for legitimate concerns
+        confetti({
+          particleCount: 40,
+          spread: 60,
+          gravity: 0.4,
+          drift: 0,
+          ticks: 300,
+          origin: { y: 0.3 },
+          colors: ["#8AC926", "#a8d8a8", "#c8e6c8"],
+          shapes: ["circle"],
+        });
+      }
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, [result.score]);
 
   const handleShare = async () => {
     if (!cardRef.current || isSharing) return;
@@ -131,7 +182,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
           </h2>
         </div>
 
-        <Gauge score={result.score} />
+        <Gauge score={result.score} isError={isError} />
 
         <div className="mt-6 space-y-4 relative z-10">
           <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 shadow-sm">
@@ -173,30 +224,42 @@ export const ResultView: React.FC<ResultViewProps> = ({
           className="flex flex-col sm:flex-row gap-3 mt-8 relative z-20"
           data-html2canvas-ignore="true"
         >
-          <button
-            onClick={() => {
-              playClick();
-              onReset();
-            }}
-            disabled={isSharing}
-            className="flex-1 flex items-center justify-center gap-2 py-4 px-4 rounded-2xl bg-gray-100 text-dark font-bold hover:bg-gray-200 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
-          >
-            <RefreshCcw size={18} />
-            Try Again
-          </button>
-
-          <button
-            onClick={handleShare}
-            disabled={isSharing}
-            className="flex-1 flex items-center justify-center gap-2 py-4 px-4 rounded-2xl bg-primary text-white font-bold hover:bg-orange-600 transition-all active:scale-95 shadow-lg shadow-orange-200 disabled:opacity-80 cursor-pointer"
-          >
-            {isSharing ? (
-              <Loader2 size={18} className="animate-spin" />
-            ) : (
-              <Share2 size={18} />
-            )}
-            {isSharing ? "Capturing..." : "Share Result"}
-          </button>
+          {isError ? (
+            <>
+              <button
+                onClick={() => { playClick(); onReset(); }}
+                className="flex-1 flex items-center justify-center gap-2 py-4 px-4 rounded-2xl bg-gray-100 text-dark font-bold hover:bg-gray-200 transition-all active:scale-95 cursor-pointer"
+              >
+                Go Home
+              </button>
+              <button
+                onClick={() => { playClick(); onRetry(); }}
+                className="flex-1 flex items-center justify-center gap-2 py-4 px-4 rounded-2xl bg-primary text-white font-bold hover:bg-orange-600 transition-all active:scale-95 shadow-lg shadow-orange-200 cursor-pointer"
+              >
+                <RefreshCcw size={18} />
+                Retry
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => { playClick(); onReset(); }}
+                disabled={isSharing}
+                className="flex-1 flex items-center justify-center gap-2 py-4 px-4 rounded-2xl bg-gray-100 text-dark font-bold hover:bg-gray-200 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+              >
+                <RefreshCcw size={18} />
+                Try Again
+              </button>
+              <button
+                onClick={handleShare}
+                disabled={isSharing}
+                className="flex-1 flex items-center justify-center gap-2 py-4 px-4 rounded-2xl bg-primary text-white font-bold hover:bg-orange-600 transition-all active:scale-95 shadow-lg shadow-orange-200 disabled:opacity-80 cursor-pointer"
+              >
+                {isSharing ? <Loader2 size={18} className="animate-spin" /> : <Share2 size={18} />}
+                {isSharing ? "Capturing..." : "Share Result"}
+              </button>
+            </>
+          )}
         </div>
       </div>
     </motion.div>
