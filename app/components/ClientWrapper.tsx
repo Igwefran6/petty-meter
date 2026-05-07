@@ -8,6 +8,7 @@ import { InteractiveMeter, InteractiveMeterHandle } from "./InteractiveMeter";
 import { HistoryManager, HistoryManagerHandle } from "./HistoryManager";
 import { ToastProvider } from "../context/ToastContext";
 import { Navigation } from "./Navigation";
+import { StatsModal } from "./StatsModal";
 
 export const ClientWrapper: React.FC<{ randomFact: string }> = ({
   randomFact,
@@ -16,6 +17,7 @@ export const ClientWrapper: React.FC<{ randomFact: string }> = ({
   const safeInitial = initialIndex === -1 ? 0 : initialIndex;
   const [factIndex, setFactIndex] = useState(safeInitial);
   const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [statsOpen, setStatsOpen] = useState(false);
   const cooldown = useRef<number[]>([safeInitial]);
   const historyManagerRef = useRef<HistoryManagerHandle | null>(null);
 
@@ -55,6 +57,10 @@ export const ClientWrapper: React.FC<{ randomFact: string }> = ({
 
   const handleNavCoffee = () => {
     window.open("https://buymeacoffee.com/igwefran6", "_blank");
+  };
+
+  const handleNavStats = () => {
+    setStatsOpen(true);
   };
 
   return (
@@ -115,7 +121,9 @@ export const ClientWrapper: React.FC<{ randomFact: string }> = ({
         onHome={handleNavHome}
         onHistory={handleNavHistory}
         onCoffee={handleNavCoffee}
+        onStats={handleNavStats}
       />
+      <StatsModal isOpen={statsOpen} onClose={() => setStatsOpen(false)} />
     </ToastProvider>
   );
 };

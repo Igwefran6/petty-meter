@@ -16,6 +16,8 @@ import { LOADING_MESSAGES } from "@/constants";
 import { User, Users } from "lucide-react";
 import { useSound } from "@/hooks/useSound";
 import { useToast } from "../context/ToastContext";
+import { updateStats } from "@/lib/statsStorage";
+import { checkNewAchievements } from "@/lib/achievements";
 
 interface InteractiveMeterProps {
   onHistoryAdd: (item: HistoryItem) => void;
@@ -112,6 +114,15 @@ export const InteractiveMeter = forwardRef<
           timestamp: Date.now(),
         };
         onHistoryAdd(newItem);
+
+        // Update stats and check for newly earned achievements
+        const { prev, next } = updateStats(response.score, data.grievance, mode);
+        const newBadges = checkNewAchievements(prev, next);
+        newBadges.forEach((badge) => {
+          setTimeout(() => {
+            showToast(`${badge.emoji} Achievement unlocked: ${badge.name}!`, "success");
+          }, 1800);
+        });
       }
     } catch (e) {
       console.error(e);

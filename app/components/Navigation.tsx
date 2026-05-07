@@ -2,19 +2,21 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, ScrollText, Coffee, Info, X, Menu } from "lucide-react";
+import { Home, ScrollText, Coffee, Info, X, Menu, Trophy } from "lucide-react";
 import { useSound } from "@/hooks/useSound";
 
 interface NavigationProps {
   onHome: () => void;
   onHistory: () => void;
   onCoffee: () => void;
+  onStats: () => void;
 }
 
 export const Navigation: React.FC<NavigationProps> = ({
   onHome,
   onHistory,
   onCoffee,
+  onStats,
 }) => {
   const { playClick, playPop } = useSound();
   const [isOpen, setIsOpen] = useState(false);
@@ -31,6 +33,16 @@ export const Navigation: React.FC<NavigationProps> = ({
         onCoffee();
       },
       className: "bg-white",
+    },
+    {
+      id: "stats",
+      icon: <Trophy size={20} />,
+      label: "My Stats",
+      action: () => {
+        playClick();
+        onStats();
+      },
+      className: "bg-white text-yellow-500",
     },
     {
       id: "info",

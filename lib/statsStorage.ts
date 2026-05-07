@@ -1,0 +1,100 @@
+const STATS_KEY = "petty_meter_stats";
+
+export interface MomentRecord {
+  score: number;
+  grievance: string;
+  date: number;
+}
+
+export interface StatsRecord {
+  totalAnalyses: number;
+  scoreSum: number;
+  pettiest: MomentRecord | null;
+  mostValid: MomentRecord | null;
+  achievements: string[];
+  selfModeCount: number;
+  otherModeCount: number;
+  hasEverScored80Plus: boolean;
+  validUnder20Count: number;
+  redemptionArc: boolean;
+}
+
+const DEFAULT_STATS: StatsRecord = {
+  totalAnalyses: 0,
+  scoreSum: 0,
+  pettiest: null,
+  mostValid: null,
+  achievements: [],
+  selfModeCount: 0,
+  otherModeCount: 0,
+  hasEverScored80Plus: false,
+  validUnder20Count: 0,
+  redemptionArc: false,
+};
+
+export const getStats = (): StatsRecord => {
+  if (typeof window === "undefined") return { ...DEFAULT_STATS };
+  try {
+    const raw = localStorage.getItem(STATS_KEY);
+    return raw ? { ...DEFAULT_STATS, ...JSON.parse(raw) } : { ...DEFAULT_STATS };
+  } catch {
+    return { ...DEFAULT_STATS };
+  }
+};
+
+export const saveStats = (stats: StatsRecord): void => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+};
+
+export const resetStats = (): void => {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(STATS_KEY);
+};
+
+export const updateStats = (
+  score: number,
+  grievance: string,
+  mode: "self" | "other"
+): { prev: StatsRecord; next: StatsRecord } => {
+  const prev = getStats();
+  const now = Date.now();
+
+  const isRedemptionArc =
+    prev.hasEverScored80Plus && score < 10 && !prev.redemptionArc;
+
+  const next: StatsRecord = {
+    ...prev,
+    totalAnalyses: prev.totalAnalyses + 1,
+    scoreSum: prev.scoreSum + score,
+    selfModeCount:
+      mode === "self" ? prev.selfModeCount + 1 : prev.selfModeCount,
+    otherModeCount:
+      mode === "other" ? prev.otherModeCount + 1 : prev.otherModeCount,
+    hasEverScored80Plus: prev.hasEverScored80Plus || score >= 80,
+    validUnder20Count:
+      score < 20 && score >= 0
+        ? prev.validUnder20Count + 1
+        : prev.validUnder20Count,
+    redemptionArc: prev.redemptionArc || isRedemptionArc,
+    pettiest:
+      !prev.pettiest || score > prev.pettiest.score
+        ? { score, grievance, date: now }
+        : prev.pettiest,
+    mostValid:
+      !prev.mostValid || score < prev.mostValid.score
+        ? { score, grievance, date: now }
+        : prev.mostValid,
+    achievements: prev.achievements,
+  };
+
+  saveStats(next);
+  return { prev, next };
+};
+
+export const unlockAchievement = (id: string): void => {
+  const stats = getStats();
+  if (!stats.achievements.includes(id)) {
+    saveStats({ ...stats, achievements: [...stats.achievements, id] });
+  }
+};
